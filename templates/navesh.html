@@ -1,0 +1,340 @@
+<html>
+
+<head><title>Chatbot</title>
+
+
+  <style>
+
+
+.chatbot-container {
+  background-image: url("https://lh3.googleusercontent.com/p/AF1QipORe67NrQMMJ9nBdMOtGCTyUFMjdloBJyh0hF7S=s1360-w1360-h1020");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width:97%;
+  height:700px;
+  padding: 20px;
+
+  border-radius: 10px;
+
+  }
+
+
+
+
+
+   /* Style the chat window */
+
+  .chat-window {
+
+  width: 500px;
+
+  height: 550px;
+  margin-top:-190px;
+  border: 1px solid #ccc;
+
+  overflow: auto;
+  display: none;
+  border-radius: 10px;
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  }
+
+
+
+
+
+  /* Style the conversation view */
+
+  .conversation-view {
+
+  height: 75%;
+  background-image:url("https://vetias.ac.in/wp-content/themes/vetias/images/mob-home-banner.jpg");
+
+  overflow: auto;
+
+
+  padding: 10px;
+
+  }
+
+
+
+
+
+  /* Style the message box */
+
+  .message-box {
+
+  width: 100%-12px;
+
+  padding: 10px;
+
+  box-sizing: border-box;
+
+  }
+
+
+
+
+
+  /* Style the textarea */
+
+  textarea {
+
+  width: 100%;
+
+  height: 80px;
+
+  padding: 10px;
+
+  box-sizing: border-box;
+
+
+  border-color: none;
+
+  resize: none;
+
+  border-radius: 5px;
+
+  }
+
+
+
+
+
+  /* Style the send button */
+
+  .button {
+
+  width: 100%;
+
+  padding: 10px;
+
+  background-color: #4CAF50;
+
+  color: white;
+
+  border: none;
+
+  cursor: pointer;
+
+  border-radius: 5px;
+
+  }
+
+.button:hover {
+background-color: #2E8B57;
+color: white;
+}
+
+
+
+
+  /* Style the conversation messages */
+
+  .conversation-view p {
+
+  margin: 0;
+
+  padding: 10px;
+
+  word-wrap: break-word;
+
+  border-radius: 10px;
+
+  padding: 10px;
+
+  margin-bottom: 10px;
+
+  }
+
+
+
+
+
+   /* Add different styles for user and bot messages */
+
+  .conversation-view .user {
+
+  text-align: right;
+
+  background-color: #F5F5F5;
+   width:50%;
+    margin-left:200px;
+  color: green;
+
+  }
+
+  .conversation-view .bot {
+
+  text-align: left;
+
+  background-color: #E5E5E5;
+
+  color: #34495E;
+   width:50%;
+    margin-right:200px;
+
+  }
+.img{
+width:13%;
+height:200px;
+margin-left:40%;
+background-color:dogerblue;
+
+}
+.Show{
+    float:left;
+    width:100px;
+    margin-top:640px;
+    border:none;
+
+    background-color: transparent;
+}
+.img1{
+     width:60px;
+}
+.Hide{
+    float:left;
+    width:100px;
+    margin-top:640px;
+    border:none;
+    display:none;
+    background-color: transparent;
+}
+
+
+
+
+
+
+
+   </style>
+
+   </head>
+
+   <body>
+
+
+       <div class="chatbot-container">
+         <img class="img" src="https://i.postimg.cc/v8L21Yt8/GQb9y9md-400x400-removebg-preview.png"> </img>
+         <button class="Show" >
+            <img class="img1"src="https://i.postimg.cc/sDjLzJGP/images-removebg-preview-1.png"></img>
+          </button>
+     <button class="Hide"><img class="img1" src="https://i.postimg.cc/sDjLzJGP/images-removebg-preview-1.png"></img></button>
+<div class="chat-window">
+
+               <div class="conversation-view">
+
+                   <div id="conversation"></div>
+
+               </div>
+
+               <div class="message-box">
+
+                   <textarea id="message"></textarea>
+
+                   <button class="button" id="send-button">Send</button>
+
+               </div>
+
+           </div>
+
+
+           </div>
+
+       </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+       <script>
+
+var inputBox = document.getElementById("message");
+
+var conversation = document.getElementById("conversation");
+
+
+
+document.getElementById("send-button").addEventListener("click", function(){
+
+    var userInput = inputBox.value;
+
+    getBotResponse(userInput);
+
+    conversation.innerHTML += "<p class='user'>" + userInput + "</p>";
+
+    inputBox.value = "";
+
+});
+
+
+
+async function getBotResponse(userInput) {
+
+    try {
+
+        const response = await fetch('/get', {
+
+            method: 'POST',
+
+            body: JSON.stringify({'msg': userInput}),
+
+            headers: {
+
+                'Content-Type': 'application/json'
+
+            }
+
+        });
+
+        const data = await response.json();
+
+        conversation.innerHTML += "<p class='bot'>" + data.response + "</p>";
+
+    } catch (error) {
+
+        console.error('Error:', error);
+
+    }
+
+}
+window.watsonAssistantChatOptions = {
+
+ integrationID: "d2b91d71-1e7e-482b-820d-63a5b66c7b85", // The ID of this integration.
+
+ region: "au-syd", // The region your integration is hosted in.
+
+ serviceInstanceID: "01e2bd5f-9a58-46c6-a9aa-7b6352ac8940", // The ID of your service instance.
+
+ onLoad: function(instance) { instance.render(); }
+
+};
+
+setTimeout(function(){
+
+const t=document.createElement('script');
+
+t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" +       (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+
+document.head.appendChild(t);
+
+});
+
+
+$('.Show').click(function() {
+$('.chat-window').show(500);
+$('.Show').hide(0);
+$('.Hide').show(0);
+});
+$('.Hide').click(function() {
+$('.chat-window').hide(500);
+$('.Show').show(0);
+$('.Hide').hide(0);
+});
+
+       </script>
+
+
+
+   </body>
+
+</html>
